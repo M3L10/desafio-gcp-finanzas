@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-900 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío Métodos Numéricos - GCP en Finanzas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="h-full flex flex-col font-sans antialiased">
+    <!-- Navbar Top -->
+    <header class="bg-slate-800 border-b border-slate-700 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-3">
+            <span class="text-xl font-bold text-indigo-400">GCP Finanzas</span>
+            <span class="text-xs bg-indigo-900 text-indigo-300 px-2 py-1 rounded-full border border-indigo-700">UMSA FCPN</span>
+        </div>
+        <div class="text-sm text-slate-300">
+            Estudiante: <span class="font-semibold text-white">Ronal Limachi Mamani</span> | Mención: <span class="font-semibold text-indigo-300">Ingeniería de Sistemas</span>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 bg-slate-800/50 border-r border-slate-700 p-4 space-y-1 overflow-y-auto hidden md:block">
+            <nav class="space-y-1 text-sm font-medium">
+                <a href="#inicio" class="flex items-center px-3 py-2 rounded-lg bg-indigo-600 text-white">1. Inicio</a>
+                <a href="#caso-estudio" class="flex items-center px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white">2. Caso de Estudio</a>
+                <a href="#formulacion" class="flex items-center px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white">3. Formulación Ax=b</a>
+                <a href="#entrada-datos" class="flex items-center px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white">4. Entrada de Datos</a>
+                <a href="#escenarios" class="flex items-center px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white">5. Tres Escenarios</a>
+                <a href="#solucion-ref" class="flex items-center px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white">6. Solución de Referencia</a>
+                <a href="#gcp-vs-gc" class="flex items-center px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white">7. GCP vs GC</a>
+                <a href="#analisis-errores" class="flex items-center px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white">8. Análisis de Errores</a>
+                <a href="#modulo-qa" class="flex items-center px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white">9. Módulo Pruebas (QA)</a>
+                <a href="#conclusiones" class="flex items-center px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white">10. Conclusiones y Ref.</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 space-y-12">
+
+            <!-- 1. Inicio -->
+            <section id="inicio" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
+                <h1 class="text-3xl font-extrabold text-white">Método de Gradientes Conjugados Precondicionado en Finanzas</h1>
+                <p class="text-slate-300 leading-relaxed">
+                    Aplicación interactiva desarrollada para el Desafío Académico de Métodos Numéricos (UMSA - FCPN). 
+                    Este proyecto modela y resuelve problemas de optimización y distribución presupuestaria financiera mediante el algoritmo GCP (Suñagua, 2020), evaluando precisión, número de condición \kappa(A) y velocidad de convergencia.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-700">
+                        <span class="text-xs text-slate-400 block">Estudiante</span>
+                        <span class="text-lg font-semibold text-indigo-400">Ronal Limachi Mamani</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-700">
+                        <span class="text-xs text-slate-400 block">Mención Académica</span>
+                        <span class="text-lg font-semibold text-emerald-400">Ingeniería de Sistemas</span>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-700">
+                        <span class="text-xs text-slate-400 block">Tolerancia Objetivo</span>
+                        <span class="text-lg font-semibold text-amber-400">10⁻⁶</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Caso de Estudio -->
+            <section id="caso-estudio" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-2">2. Caso de Estudio: Distribución Presupuestaria IT</h2>
+                <p class="text-slate-300 leading-relaxed">
+                    En el ámbito de la Ingeniería de Sistemas, la planificación financiera de una infraestructura tecnológica requiere asignar fondos entre cuatro departamentos interdependientes. Los flujos cruzados y costos compartidos de red, licencias y soporte técnico generan un sistema acoplado Ax=b.
+                </p>
+            </section>
+
+            <!-- 3. Formulación -->
+            <section id="formulacion" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-2">3. Formulación del Sistema Linear (n \ge 4)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-indigo-300 mb-2">Variables Financieras</h3>
+                        <ul class="space-y-2 text-slate-300 text-sm">
+                            <li><strong class="text-white">x_1:</strong> Presupuesto Infraestructura de Redes y Servidores</li>
+                            <li><strong class="text-white">x_2:</strong> Presupuesto Desarrollo de Software y Apps</li>
+                            <li><strong class="text-white">x_3:</strong> Presupuesto Ciberseguridad y Auditoría</li>
+                            <li><strong class="text-white">x_4:</strong> Presupuesto Soporte Técnico y Operaciones IT</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-700">
+                        <h3 class="text-lg font-semibold text-indigo-300 mb-2">Verificación de Matriz Simétrica Definida Positiva</h3>
+                        <p class="text-xs text-slate-400 mb-2">Criterio de Sylvester (Determinantes de menores principales):</p>
+                        <div id="sylvester-status" class="text-sm font-mono text-emerald-400">
+                            Matriz Válida: A = A^T y \det(A_i) > 0, \forall i
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Entrada de Datos -->
+            <section id="entrada-datos" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-2">4. Entrada de Datos y Configuración</h2>
+                <p class="text-slate-300 text-sm">Modifique los coeficientes de la matriz A y del vector b, o seleccione el tipo de precondicionador.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-md font-semibold text-slate-200 mb-2">Matriz de Coeficientes A (4x4)</h3>
+                        <div id="matrix-a-inputs" class="grid grid-cols-4 gap-2"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-md font-semibold text-slate-200 mb-2">Vector Términos Independientes b</h3>
+                        <div id="vector-b-inputs" class="grid grid-cols-1 gap-2"></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 pt-4 border-t border-slate-700 items-center">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Precondicionador</label>
+                        <select id="select-precond" class="bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-white">
+                            <option value="jacobi">Jacobi (Diagonal)</option>
+                            <option value="icholesky">Cholesky Incompleto</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Tolerancia</label>
+                        <input type="text" id="input-tol" value="1e-6" class="bg-slate-900 border border-slate-700 rounded px-3 py-1.5 text-sm text-white w-28">
+                    </div>
+                    <button id="btn-ejecutar" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-semibold text-sm transition mt-auto">
+                        Calcular y Ejecutar Solvers
+                    </button>
+                </div>
+            </section>
+
+            <!-- 5. Escenarios -->
+            <section id="escenarios" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-2">5. Carga de Escenarios Obligatorios</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button id="btn-esc-ideal" class="p-4 bg-slate-900 hover:bg-slate-700 border border-emerald-500/40 rounded-xl text-left space-y-2 transition">
+                        <span class="text-emerald-400 font-bold block">1. Escenario Ideal</span>
+                        <span class="text-xs text-slate-400 block">Estable, matriz bien condicionada con \kappa(A) bajo.</span>
+                    </button>
+                    <button id="btn-esc-estres" class="p-4 bg-slate-900 hover:bg-slate-700 border border-amber-500/40 rounded-xl text-left space-y-2 transition">
+                        <span class="text-amber-400 font-bold block">2. Bajo Estrés Financiero</span>
+                        <span class="text-xs text-slate-400 block">Perturbación de costos (b elevado en un 25%).</span>
+                    </button>
+                    <button id="btn-esc-mal" class="p-4 bg-slate-900 hover:bg-slate-700 border border-rose-500/40 rounded-xl text-left space-y-2 transition">
+                        <span class="text-rose-400 font-bold block">3. Mal Condicionado</span>
+                        <span class="text-xs text-slate-400 block">Alta interdependencia fuera de la diagonal (\kappa(A) \gg 1).</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 6. Solución de Referencia -->
+            <section id="solucion-ref" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-2">6. Solución Numérica de Referencia (Método Directo)</h2>
+                <p class="text-slate-300 text-sm">Obtenida mediante Factorización Directa de Cholesky / LU (x_{ref} exacto):</p>
+                <div id="res-sol-ref" class="font-mono text-indigo-300 bg-slate-900 p-4 rounded-lg border border-slate-700"></div>
+            </section>
+
+            <!-- 7. GCP vs GC -->
+            <section id="gcp-vs-gc" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-6">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-2">7. Comparativa: GCP vs GC Simple</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <h3 class="text-md font-semibold text-slate-300">Resumen de Iteraciones</h3>
+                        <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 space-y-2 text-sm">
+                            <div class="flex justify-between"><span class="text-slate-400">Iteraciones GC Simple:</span> <span id="iter-gc-val" class="font-mono text-amber-400 font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Iteraciones GCP:</span> <span id="iter-gcp-val" class="font-mono text-emerald-400 font-bold">0</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Residuo Relativo Final GCP:</span> <span id="res-gcp-val" class="font-mono text-slate-200">0</span></div>
+                        </div>
+                    </div>
+                    <div class="h-48 bg-slate-900 p-2 rounded-lg border border-slate-700">
+                        <canvas id="chartConvergencia"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. Análisis de Errores -->
+            <section id="analisis-errores" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-2">8. Análisis de Errores y Condicionamiento</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900 text-slate-400 uppercase text-xs">
+                            <tr>
+                                <th class="p-3">Variable</th>
+                                <th class="p-3">Solución Ref (x_{ref})</th>
+                                <th class="p-3">Solución GCP (x_{gcp})</th>
+                                <th class="p-3">Error Absoluto (E_a)</th>
+                                <th class="p-3">Error Porcentual (E_p)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-errores-body" class="divide-y divide-slate-700 font-mono"></tbody>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 flex justify-between items-center">
+                        <span class="text-sm text-slate-400">Número de Condición \kappa(A):</span>
+                        <span id="kappa-a-val" class="font-mono text-lg font-bold text-rose-400">0</span>
+                    </div>
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 flex justify-between items-center">
+                        <span class="text-sm text-slate-400">Número de Condición Precondicionado \kappa(M^{-1}A):</span>
+                        <span id="kappa-ma-val" class="font-mono text-lg font-bold text-emerald-400">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. Módulo QA -->
+            <section id="modulo-qa" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-2">9. Módulo de Pruebas de Software (QA)</h2>
+                <p class="text-slate-300 text-sm">Ejecución interactiva comprobable de los casos de prueba de calidad requeridos:</p>
+                <div class="space-y-2">
+                    <button id="btn-run-qa" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-semibold text-sm transition">
+                        Ejecutar Pruebas QA Automáticas
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-900 text-slate-400 uppercase text-xs">
+                            <tr>
+                                <th class="p-3">Caso de Prueba</th>
+                                <th class="p-3">Entrada</th>
+                                <th class="p-3">Resultado Esperado</th>
+                                <th class="p-3">Resultado Obtenido</th>
+                                <th class="p-3">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-qa-body" class="divide-y divide-slate-700 text-xs"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 10. Conclusiones y Referencias -->
+            <section id="conclusiones" class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-4">
+                <h2 class="text-2xl font-bold text-white border-b border-slate-700 pb-2">10. Conclusiones y Referencias</h2>
+                <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                    <p>
+                        El Método de Gradientes Conjugados Precondicionado (GCP) demuestra una notable eficiencia en la resolución de sistemas lineales simétricos definidos positivos aplicados al ámbito financiero. En matrices mal condicionadas, la introducción del precondicionador de Jacobi o Cholesky Incompleto reduce drásticamente el número de condición de \kappa(A) a \kappa(M^{-1}A), acelerando la convergencia.
+                    </p>
+                    <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 space-y-1">
+                        <span class="text-xs text-indigo-400 font-bold block uppercase">Referencia Bibliográfica Principal</span>
+                        <p class="font-mono text-xs text-slate-300">
+                            Suñagua S., P. (2020). Método de Gradientes Conjugados Precondicionado. Revista Boliviana de Matemática UMSA, 04, 2-7.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Application Logic -->
+    <script src="solvers.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
